@@ -76,7 +76,6 @@ def scrape(url):
 
     try:
         # Extract the elements storing the usernames and comments.
-        username_elems = driver.find_elements_by_xpath('//*[@id="author-text"]')
         comment_elems = driver.find_elements_by_xpath('//*[@id="content-text"]')
         like_counts = driver.find_elements_by_xpath('//*[@id="vote-count-middle"]')
     except exceptions.NoSuchElementException:
@@ -85,7 +84,7 @@ def scrape(url):
         print(error)
 
     print("> VIDEO TITLE: " + title + "\n")
-    print("> USERNAMES & COMMENTS:")
+    print("> SCRAPING COMMENTS...")
 
     # print("-----------------------\nCOMMENT ELEMS\n-----------------------")
     # print(f"Length: {len(comment_elems)}")
@@ -99,7 +98,7 @@ def scrape(url):
         }
     }
 
-    for username, comment, likes in zip(username_elems, comment_elems, like_counts):
+    for comment, likes in zip(comment_elems, like_counts):
         if likes.text: likes = int(likes.text)
         else: likes = 0
         results['comments']['text'].append(comment.text)

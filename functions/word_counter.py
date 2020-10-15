@@ -30,10 +30,9 @@ def word_counter(list_of_strings, group_size=1, lang='english'):
     Count_data = CountVec.fit_transform(list_of_strings)
     
     # Create dataframe
-    df=pd.DataFrame(Count_data.toarray(),columns=CountVec.get_feature_names())
-    df.loc['Totals'] = df.sum()
-    df = pd.concat([df.loc[['Totals']], df[:-1]], axis=0)
-    print(df)
+    df = pd.DataFrame(Count_data.toarray(),columns=CountVec.get_feature_names())
+
+    return df
 
 string_1="This is a good job. I will not miss it for anything"
 string_2="This is not good at all"
