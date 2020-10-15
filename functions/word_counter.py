@@ -18,6 +18,7 @@ Example for running as the main program:
     $ python word_counter.py STRING_TO_ANALYZE --> Uncomment the part with 'sys.argv[1]' to run this type of commands
 """
 import pandas as pd
+import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 
 def word_counter(list_of_strings, group_size=1, lang='english'):
@@ -31,6 +32,26 @@ def word_counter(list_of_strings, group_size=1, lang='english'):
     
     # Create dataframe
     df = pd.DataFrame(Count_data.toarray(),columns=CountVec.get_feature_names())
+
+    return df
+
+def add_likes_and_totals(count_table, likes):
+    df = count_table
+
+    # Add the number of likes as the first column of the df and sort by likes
+    df['likes'] = likes
+    columns = df.columns
+    new_columns = columns[:-1].insert(0, columns[-1])
+    df = df.reindex(columns=new_columns)
+    df = df.sort_values(by='likes', ascending=False)
+
+    # Add a 'Totals' columns as the first row.
+    df.loc['Totals'] = df.sum()
+    df = pd.concat([df.loc[['Totals']], df[:-1]], axis=0)
+
+    # Now sort columns by word occurrence
+    df = df.sort_values(by='Totals', ascending=False, axis=1)
+    df.loc[['Totals'],['likes']] = np.nan
 
     return df
 
