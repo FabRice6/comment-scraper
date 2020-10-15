@@ -8,6 +8,7 @@ Example: TODO adapt if necessary with eg. a second argument = location for savin
 import functions.comments as comments
 import functions.word_counter as wcount
 import pandas as pd
+import json
 import os
 import sys
 
@@ -47,6 +48,10 @@ if __name__ == "__main__":
         one_video = comments.scrape(url=url)
         comments_and_likes['comments']['text'].append(one_video['comments']['text'])
         comments_and_likes['comments']['likes'].append(one_video['comments']['likes'])
+    
+    # Save the comments in a JSON file
+    with open(f"./data/comments_{comments_and_likes['title']}.json", 'w') as fp:
+        json.dump(comments_and_likes, fp, indent=4)
 
     # Make 1-, 2- and 3-grams
     for i in range(3):
