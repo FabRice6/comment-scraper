@@ -23,7 +23,7 @@ def scrape(url):
         When certain elements to look for cannot be found
     
     Returns:
-        Nothing. Just prints out all the comments.
+        Dictionary with video title, all comments and the likes count for each comment.
     """
 
     # Note: replace argument with absolute path to the driver executable.
@@ -99,8 +99,15 @@ def scrape(url):
     }
 
     for comment, likes in zip(comment_elems, like_counts):
-        if likes.text: likes = int(likes.text)
-        else: likes = 0
+        # Reformat missing likes and type '1.5K' like count to integer
+        if not likes.text: 
+            likes = 0
+        elif likes.text[-1] == 'K':
+            likes = int(float(likes.text[:-1]) * 1000)
+        elif likes.text[-1] == 'M':
+            likes = int(float(likes.text[:-1]) * 1000 * 1000)
+        else:
+            likes = int(likes.text)
         results['comments']['text'].append(comment.text)
         results['comments']['likes'].append(likes)
         
