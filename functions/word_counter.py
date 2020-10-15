@@ -7,26 +7,36 @@ Input:
 
 Returns:
     TODO Dataframe with count per word per text input. (Probably better to return a dictionary with word(group) + count, since we don't care about the phrases separately).
+
+Example for running as the main program:
+    $ python word_counter.py --> Runs with argument defined in the script
+    $ python word_counter.py STRING_TO_ANALYZE --> Uncomment the part with 'sys.argv[1]' to run this type of commands
 """
-
-
-
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+
+def word_counter(list_of_strings, group_size=1, lang='english'):
  
-sentence_1="This is a good job. I will not miss it for anything"
-sentence_2="This is not good at all"
+    CountVec = CountVectorizer(ngram_range=(group_size, group_size)) #, stop_words=lang)
+
+    # Transform
+    Count_data = CountVec.fit_transform(list_of_strings)
+    
+    # Create dataframe
+    cv_dataframe=pd.DataFrame(Count_data.toarray(),columns=CountVec.get_feature_names())
+    print(cv_dataframe)
+
+string_1="This is a good job. I will not miss it for anything"
+string_2="This is not good at all"
+
+strings = [string_1, string_2]
+
+if __name__ == "__main__":
+    word_counter(strings)
+    word_counter(strings, 2)
 
 
- 
- 
- 
-CountVec_n1 = CountVectorizer(ngram_range=(1,1), stop_words='english')
-CountVec_n2 = CountVectorizer(ngram_range=(2,2), stop_words='english')
-
-# Transform
-Count_data = CountVec_n1.fit_transform([sentence_1,sentence_2])
- 
-# Create dataframe
-cv_dataframe=pd.DataFrame(Count_data.toarray(),columns=CountVec.get_feature_names())
-print(cv_dataframe)
+# # If you want to run this script to analyze a string passed in the terminal.
+# if __name__ == "__main__":
+#     scrape(sys.argv[1])
+#     scrape(sys.argv[1], 2)
