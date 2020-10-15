@@ -34,7 +34,7 @@ urls = [
 
 # Initialize empty dict for the results
 comments_and_likes = {
-    'title': 'WomensHealthMag_top15',
+    'title': 'None',
     'comments': {
         'text': [],
         'likes': []
@@ -49,7 +49,13 @@ if __name__ == "__main__":
         comments_and_likes['comments']['text'].append(one_video['comments']['text'])
         comments_and_likes['comments']['likes'].append(one_video['comments']['likes'])
     
-    # Save the comments in a JSON file
+    # Flatten the lists of lists
+    flat_text = [item for sublist in data['comments']['text'] for item in sublist]
+    flat_likes = [item for sublist in data['comments']['likes'] for item in sublist]
+    comments_and_likes['comments']['text'] = flat_text
+    comments_and_likes['comments']['likes'] = flat_likes
+    
+    # Save the comments dict in a JSON file
     with open(f"./data/comments_{comments_and_likes['title']}.json", 'w') as fp:
         json.dump(comments_and_likes, fp, indent=4)
 
