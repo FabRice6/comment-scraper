@@ -59,6 +59,10 @@ if __name__ == "__main__":
     with open(f"./data/comments_{comments_and_likes['title']}.json", 'w') as fp:
         json.dump(comments_and_likes, fp, indent=4)
 
+    # # In order to skip a step and load the previously scraped data
+    # with open('data/comments_WomensHealthMag_top15.json', 'r') as fp:
+    #     comments_and_likes = json.load(fp)
+
     # Make 1-, 2- and 3-grams
     for i in range(3):
         comment_texts = comments_and_likes['comments']['text']
